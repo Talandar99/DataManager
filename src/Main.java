@@ -73,20 +73,22 @@ public class Main {
         frame.add(table_booksdata);
 
 
+        DataBaseConnector.PrintTest();
 
-        //przycisk do otwierania 
-        JButton button_extract = new JButton();
-        button_extract.setSize(150,30);//rozmiar przycisku 
-        button_extract.setLocation(0,0);//Lokalizacja przycisku
-        button_extract.setText("Reload");//napis na przycisku
-        frame.add(button_extract);//dodawanie przycisku do ramki
+        //przycisk do odświeżania
+        JButton button_reload = new JButton();
+        button_reload.setSize(150,30);//rozmiar przycisku 
+        button_reload.setLocation(0,0);//Lokalizacja przycisku
+        button_reload.setText("Reload");//napis na przycisku
+        frame.add(button_reload);//dodawanie przycisku do ramki
         button_login.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){ 
-                //
+            
             }
         });  
 
         //przycisk do zapisu
+        /*
         JButton button_save = new JButton();
         button_save.setSize(150,30);
         button_save.setLocation(0,30);
@@ -97,7 +99,8 @@ public class Main {
                 //
             }
         }); 
-
+        */
+        
         //Searching
         JLabel label_search = new JLabel("Search:");
         label_search.setSize(150,30);
@@ -160,7 +163,7 @@ public class Main {
         //comboBox_search.addActionListener(this);
         frame.add(comboBox_order_updown);
 
-
+        
         JButton button_sort = new JButton();
         button_sort.setSize(150,30);
         button_sort.setLocation(0,340);
@@ -195,7 +198,7 @@ public class Main {
         frame.add(button_book_add);
         button_book_add.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){ 
-                //
+                DataBaseConnector.post(text_author.getText(),text_title.getText());
             }
         }); 
 
@@ -251,7 +254,7 @@ public class Main {
         frame.add(button_add_data);
         button_add_data.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){ 
-                //
+                DataBaseConnector.dev_post();
             }
         }); 
 

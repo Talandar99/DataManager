@@ -7,8 +7,9 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public class DataBaseConnector {
-    public static String user;
-    public static String password;
+    //login
+    public static String user="root";
+    public static String password="2811";
     public static Boolean accessgranted=false;
     public static void login(String user, String password){
         try{
@@ -20,7 +21,6 @@ public class DataBaseConnector {
         }
 
     }
-
 
     public static Connection getConnection() throws Exception{
         try{
@@ -35,6 +35,7 @@ public class DataBaseConnector {
         }
         return null;
     }
+
     public static void createTable(){
         try{
             Connection conn = getConnection();
@@ -48,8 +49,29 @@ public class DataBaseConnector {
             System.out.println("Function complete");
         }
     }
-
-    public static void post(String author, String title) throws Exception{
+    public static void dev_post(){
+        try{
+            post("George Orwell","1984r");
+            post("George Orwell","Folwark Zwierzęcy");
+            post("Hans Christian Andersen","Królowa Sniegu");
+            post("Hans Christian Andersen","Calineczka");
+            post("Hans Christian Andersen","Nowe Szaty Cesarza");
+            post("Hans Christian Andersen","Brzydkie Kaczątko");
+            post("Adam Mickiewicz","Pan Tadeusz");
+            post("C.S. Lewis","Opowieści z Narnii");
+            post("Timothy Zahn","Dynastia Thrawna");
+            post("Timothy Zahn","Thrawn");
+            post("Timothy Zahn","Starcraft");
+            post("Aldous Huxley","Nowy Wspaniały Świat");
+        }catch(Exception e){
+            System.out.println(e);
+        }
+        finally{
+            System.out.println("Dev Data added");
+        }
+    }
+    
+    public static void post(String author, String title){
         final String var1 = author;
         final String var2 = title;
         try{
@@ -68,11 +90,11 @@ public class DataBaseConnector {
     public static ArrayList<String> get() throws Exception{
         try{
             Connection con = getConnection();
-                //PreparedStatement statement = con.prepareStatement("SELECT * FROM booksbase");
-                //PreparedStatement statement = con.prepareStatement("SELECT * FROM booksbase LIMIT 3");
-                //PreparedStatement statement = con.prepareStatement("SELECT * FROM booksbase ORDER BY Author ASC");
+            PreparedStatement statement = con.prepareStatement("SELECT * FROM booksbase");
+            //PreparedStatement statement = con.prepareStatement("SELECT * FROM booksbase LIMIT 3");
+            //PreparedStatement statement = con.prepareStatement("SELECT * FROM booksbase ORDER BY Author ASC");
             //PreparedStatement statement = con.prepareStatement("SELECT * FROM booksbase, booksbase2 WHERE booksbase.id = booksbase2.id");
-            PreparedStatement statement = con.prepareStatement("SELECT * FROM booksbase ORDER BY Author DESC");
+            //PreparedStatement statement = con.prepareStatement("SELECT * FROM booksbase ORDER BY Author DESC");
             //String searchingAuthor="Andrzej Sapkowski";
             //PreparedStatement statement = con.prepareStatement("SELECT * FROM booksbase WHERE Author = '"+searchingAuthor+"'");
             ResultSet result = statement.executeQuery();
@@ -87,13 +109,22 @@ public class DataBaseConnector {
 
                 array.add(result.getString("Title"));
             }
-            System.out.println("\nAll records have been selected");
+            System.out.println(">>---All records have been selected---<<");
             return array;
 
         }catch(Exception e){
             System.out.println(e);
         }
         return null;
+    }
+    public static void PrintTest(){
+        try{
+            get();
+        }catch(Exception e){
+            System.out.println("No i co pajacu");
+        }finally{
+            System.out.println("dziaa");
+        }
     }
 
 }
