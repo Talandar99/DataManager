@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class DataBaseConnector {
     //login
     public static String user="root";
-    public static String password="2811";
+    public static String password="1234";
     public static Boolean accessgranted=false;
     public static void login(String user, String password){
         try{
