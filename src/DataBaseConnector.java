@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class DataBaseConnector {
     //login
     public static String user="root";
-    public static String password="1234";
+    public static String password="2811";
     public static Boolean accessgranted=false;
     public static void login(String user, String password){
         try{
@@ -106,7 +106,6 @@ public class DataBaseConnector {
                 System.out.print(result.getString("Author"));
                 System.out.print(" ");
                 System.out.println(result.getString("Title"));
-
                 array.add(result.getString("Title"));
             }
             System.out.println(">>---All records have been selected---<<");
@@ -117,6 +116,47 @@ public class DataBaseConnector {
         }
         return null;
     }
+    public static int RowCount(String pickedtable){
+        try{
+            final String table= pickedtable;
+            Connection con = getConnection();
+            PreparedStatement statement = con.prepareStatement("SELECT * FROM "+table);
+            ResultSet result = statement.executeQuery();
+            int i=0;
+            while(result.next()){
+                i++;
+            }
+            //System.out.println("rows Counted");
+            return i;
+
+        }catch(Exception e){
+            System.out.println(e);
+        }
+        return 0;
+    }
+    public static String[][] GetData(String pickedtable){
+        String[][] Data= new String[4][RowCount(pickedtable)];
+        int i=0;
+        try{
+            final String table= pickedtable;
+            Connection con = getConnection();
+            PreparedStatement statement = con.prepareStatement("SELECT * FROM "+table);
+            ResultSet result = statement.executeQuery();
+            while(result.next()){
+                Data[0][i]=result.getString("Id");
+                Data[1][i]=result.getString("Author");
+                Data[2][i]=result.getString("Title");
+                i++;
+            }
+            return Data;
+        }catch(Exception e){
+            System.out.println(e);
+        }
+        return null;
+    }
+
+
+
     public static void PrintTest(){
         try{
             get();
