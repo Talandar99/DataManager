@@ -103,7 +103,7 @@ public class DataBaseConnector {
         }else{
             try{
                 Connection con = getConnection();
-                PreparedStatement posted = con.prepareStatement("UPDATE booksbase SET User = '' WHERE id ="+var2+"");
+                PreparedStatement posted = con.prepareStatement("UPDATE booksbase SET User = null WHERE id ="+var2+"");
                 posted.executeUpdate();
             }catch(Exception e){
                 System.out.println(e);

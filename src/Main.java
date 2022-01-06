@@ -23,25 +23,31 @@ public class Main {
             if(i%4==0){
                 if(data_rows>y){
                     MainTableField.textFields.get(i).setText(data_booksbase[0][y]);
+                }else{
+                    MainTableField.textFields.get(i).setText(" ");  
                 }
             }
             if(i%4==1){
                 if(data_rows>y){
                     MainTableField.textFields.get(i).setText(data_booksbase[1][y]);
+                }else{
+                    MainTableField.textFields.get(i).setText(" ");  
                 }
             }
             if(i%4==2){
                 if(data_rows>y){
                     MainTableField.textFields.get(i).setText(data_booksbase[2][y]);
+                }else{
+                    MainTableField.textFields.get(i).setText(" ");  
                 }
             }
             if(i%4==3){
                 if(data_rows>y){
                     String temp = data_booksbase[3][y];
                     if (temp==null){
-                        MainTableField.textFields.get(i).setText("Yes");
+                        MainTableField.textFields.get(i).setText(" ");
                     }else{
-                        MainTableField.textFields.get(i).setText("No "+data_booksbase[3][y]+" have it");
+                        MainTableField.textFields.get(i).setText(data_booksbase[3][y]+" have it");
                     }
                 }
                 y++;
@@ -74,25 +80,31 @@ public class Main {
             if(i%4==0){
                 if(data_rows>y){
                     MainTableField.textFields.get(i).setText(data_booksbase[0][y]);
+                }else{
+                    MainTableField.textFields.get(i).setText(" ");  
                 }
             }
             if(i%4==1){
                 if(data_rows>y){
                     MainTableField.textFields.get(i).setText(data_booksbase[1][y]);
+                }else{
+                    MainTableField.textFields.get(i).setText(" ");  
                 }
             }
             if(i%4==2){
                 if(data_rows>y){
                     MainTableField.textFields.get(i).setText(data_booksbase[2][y]);
+                }else{
+                    MainTableField.textFields.get(i).setText(" ");  
                 }
             }
             if(i%4==3){
                 if(data_rows>y){
                     String temp = data_booksbase[3][y];
                     if (temp==null){
-                        MainTableField.textFields.get(i).setText("Yes");
+                        MainTableField.textFields.get(i).setText(" ");
                     }else{
-                        MainTableField.textFields.get(i).setText("No "+data_booksbase[3][y]+" have it");
+                        MainTableField.textFields.get(i).setText(data_booksbase[3][y]+" have it");
                     }
                 }
                 y++;
@@ -115,25 +127,31 @@ public class Main {
             if(i%4==0){
                 if(data_rows>y){
                     MainTableField.textFields.get(i).setText(data_booksbase[0][y]);
+                }else{
+                    MainTableField.textFields.get(i).setText(" ");  
                 }
             }
             if(i%4==1){
                 if(data_rows>y){
                     MainTableField.textFields.get(i).setText(data_booksbase[1][y]);
+                }else{
+                    MainTableField.textFields.get(i).setText(" ");  
                 }
             }
             if(i%4==2){
                 if(data_rows>y){
                     MainTableField.textFields.get(i).setText(data_booksbase[2][y]);
+                }else{
+                    MainTableField.textFields.get(i).setText(" ");  
                 }
             }
             if(i%4==3){
                 if(data_rows>y){
                     String temp = data_booksbase[3][y];
                     if (temp==null){
-                        MainTableField.textFields.get(i).setText("Yes");
+                        MainTableField.textFields.get(i).setText(" ");
                     }else{
-                        MainTableField.textFields.get(i).setText("No "+data_booksbase[3][y]+" have it");
+                        MainTableField.textFields.get(i).setText(data_booksbase[3][y]+" have it");
                     }
                 }
                 y++;
@@ -218,29 +236,38 @@ public class Main {
                     MainTableField.textFields.get(i).setLocation(tablelocationX+0,60+(30*y));
                     if(data_rows>y){
                         MainTableField.textFields.get(i).setText(data_booksbase[0][y]);
+                    }else{
+                        MainTableField.textFields.get(i).setText(" ");  
                     }
                 }
                 if(i%4==1){
                     MainTableField.textFields.get(i).setLocation(tablelocationX+150,60+(30*y));
                     if(data_rows>y){
                         MainTableField.textFields.get(i).setText(data_booksbase[1][y]);
+                    }else{
+                        MainTableField.textFields.get(i).setText(" ");  
                     }
                 }
                 if(i%4==2){
                     MainTableField.textFields.get(i).setLocation(tablelocationX+300,60+(30*y));
                     if(data_rows>y){
                         MainTableField.textFields.get(i).setText(data_booksbase[2][y]);
+                    }else{
+                        MainTableField.textFields.get(i).setText(" ");  
                     }
+                    
                 }
                 if(i%4==3){
                     MainTableField.textFields.get(i).setLocation(tablelocationX+450,60+(30*y));
                     if(data_rows>y){
                         String temp = data_booksbase[3][y];
                         if (temp==null){
-                            MainTableField.textFields.get(i).setText("Yes");
+                            MainTableField.textFields.get(i).setText(" ");
                         }else{
-                            MainTableField.textFields.get(i).setText("No "+data_booksbase[3][y]+" have it");
+                            MainTableField.textFields.get(i).setText(data_booksbase[3][y]+" have it");
                         }
+                    }else{
+                        MainTableField.textFields.get(i).setText(" ");  
                     }
                     y++;
                 }
@@ -271,7 +298,7 @@ public class Main {
         column_id.setText("ID");
         column_author.setText("Author");
         column_title.setText("Title");
-        column_avalible.setText("AVAILABLE?");
+        column_avalible.setText("Avalibility data");
         frame.add(column_id);
         frame.add(column_author);
         frame.add(column_title);
