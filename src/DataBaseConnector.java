@@ -8,8 +8,8 @@ import java.util.ArrayList;
 
 public class DataBaseConnector {
     //login
-    public static String user="root";
-    public static String password="1234";
+    public static String user;
+    public static String password;
     public static Boolean accessgranted=false;
     public static void login(String user, String password){
         try{
@@ -39,7 +39,7 @@ public class DataBaseConnector {
     public static void createTable(){
         try{
             Connection conn = getConnection();
-            PreparedStatement create = conn.prepareStatement("CREATE TABLE IF NOT EXISTS booksbase(id int NOT NULL AUTO_INCREMENT, Author varchar(255), Title varchar(255), PRIMARY KEY(id))");//Note the added ')' after 'id)'
+            PreparedStatement create = conn.prepareStatement("CREATE TABLE IF NOT EXISTS booksbase(id int NOT NULL AUTO_INCREMENT, Author varchar(255), Title varchar(255), User varchar(255), PRIMARY KEY(id))");//Note the added ')' after 'id)'
             create.executeUpdate();
 
         }catch(Exception e){
@@ -70,7 +70,6 @@ public class DataBaseConnector {
             System.out.println("Dev Data added");
         }
     }
-    
     public static void post(String author, String title){
         final String var1 = author;
         final String var2 = title;
@@ -86,6 +85,34 @@ public class DataBaseConnector {
         finally{
             System.out.println("Insert Completed");
         }
+    }
+    public static void update(String user, int id, boolean remove){
+        final String var1 = user;
+        final int var2 = id;
+        if (remove==false){
+            try{
+                Connection con = getConnection();
+                PreparedStatement posted = con.prepareStatement("UPDATE booksbase SET User = '"+user+"' WHERE id ="+var2+"");
+                posted.executeUpdate();
+            }catch(Exception e){
+                System.out.println(e);
+            }
+            finally{
+                System.out.println("Data Updated added");
+            }
+        }else{
+            try{
+                Connection con = getConnection();
+                PreparedStatement posted = con.prepareStatement("UPDATE booksbase SET User = '' WHERE id ="+var2+"");
+                posted.executeUpdate();
+            }catch(Exception e){
+                System.out.println(e);
+            }
+            finally{
+                System.out.println("Data Updated removed");
+            }  
+        }
+
     }
     public static ArrayList<String> get() throws Exception{
         try{
@@ -146,6 +173,7 @@ public class DataBaseConnector {
                 Data[0][i]=result.getString("Id");
                 Data[1][i]=result.getString("Author");
                 Data[2][i]=result.getString("Title");
+                Data[3][i]=result.getString("User");
                 i++;
             }
             return Data;
@@ -166,6 +194,7 @@ public class DataBaseConnector {
                 Data[0][i]=result.getString("Id");
                 Data[1][i]=result.getString("Author");
                 Data[2][i]=result.getString("Title");
+                Data[3][i]=result.getString("User");
                 i++;
             }
             return Data;
@@ -186,6 +215,7 @@ public class DataBaseConnector {
                 Data[0][i]=result.getString("Id");
                 Data[1][i]=result.getString("Author");
                 Data[2][i]=result.getString("Title");
+                Data[3][i]=result.getString("User");
                 i++;
             }
             return Data;
@@ -206,6 +236,7 @@ public class DataBaseConnector {
                 Data[0][i]=result.getString("Id");
                 Data[1][i]=result.getString("Author");
                 Data[2][i]=result.getString("Title");
+                Data[3][i]=result.getString("User");
                 i++;
             }
             return Data;
@@ -226,6 +257,7 @@ public class DataBaseConnector {
                 Data[0][i]=result.getString("Id");
                 Data[1][i]=result.getString("Author");
                 Data[2][i]=result.getString("Title");
+                Data[3][i]=result.getString("User");
                 i++;
             }
             return Data;
@@ -246,6 +278,7 @@ public class DataBaseConnector {
                 Data[0][i]=result.getString("Id");
                 Data[1][i]=result.getString("Author");
                 Data[2][i]=result.getString("Title");
+                Data[3][i]=result.getString("User");
                 i++;
             }
             return Data;
@@ -266,6 +299,7 @@ public class DataBaseConnector {
                 Data[0][i]=result.getString("Id");
                 Data[1][i]=result.getString("Author");
                 Data[2][i]=result.getString("Title");
+                Data[3][i]=result.getString("User");
                 i++;
             }
             return Data;
@@ -287,20 +321,84 @@ public class DataBaseConnector {
             System.out.println("nothing left");
         }
     }
-    public static void Delete_by_ID(){
+    public static void DeleteRow(String table, int id){
         try{
+            //table= "booksbase";
+           //id=2;
             Connection con = getConnection();
-            PreparedStatement kill = con.prepareStatement("drop table booksbase");
+            PreparedStatement kill = con.prepareStatement("delete from "+table+" where Id="+id+" ORDER BY Id DESC LIMIT 1");
             kill.executeUpdate();
             createTable();
         }catch(Exception e){
             System.out.println(e);
         }
         finally{
-            System.out.println("nothing left");
+            System.out.println("row removed");
         }
     }
-
+    public static String[][] Search_ID(String pickedtable, String value){
+        String[][] Data= new String[4][RowCount(pickedtable)];
+        int i=0;
+        try{
+            final String table= pickedtable;
+            Connection con = getConnection();
+            PreparedStatement statement = con.prepareStatement("SELECT * FROM "+table+" where id="+value);
+            ResultSet result = statement.executeQuery();
+            while(result.next()){
+                Data[0][i]=result.getString("Id");
+                Data[1][i]=result.getString("Author");
+                Data[2][i]=result.getString("Title");
+                Data[3][i]=result.getString("User");
+                i++;
+            }
+            return Data;
+        }catch(Exception e){
+            System.out.println(e);
+        }
+        return null;
+    }
+    public static String[][] Search_Author(String pickedtable, String value){
+        String[][] Data= new String[4][RowCount(pickedtable)];
+        int i=0;
+        try{
+            final String table= pickedtable;
+            Connection con = getConnection();
+            PreparedStatement statement = con.prepareStatement("SELECT * FROM "+table+" where author='"+value+"'");
+            ResultSet result = statement.executeQuery();
+            while(result.next()){
+                Data[0][i]=result.getString("Id");
+                Data[1][i]=result.getString("Author");
+                Data[2][i]=result.getString("Title");
+                Data[3][i]=result.getString("User");
+                i++;
+            }
+            return Data;
+        }catch(Exception e){
+            System.out.println(e);
+        }
+        return null;
+    }
+    public static String[][] Search_Title(String pickedtable, String value){
+        String[][] Data= new String[4][RowCount(pickedtable)];
+        int i=0;
+        try{
+            final String table= pickedtable;
+            Connection con = getConnection();
+            PreparedStatement statement = con.prepareStatement("SELECT * FROM "+table+" where title='"+value+"'");
+            ResultSet result = statement.executeQuery();
+            while(result.next()){
+                Data[0][i]=result.getString("Id");
+                Data[1][i]=result.getString("Author");
+                Data[2][i]=result.getString("Title");
+                Data[3][i]=result.getString("User");
+                i++;
+            }
+            return Data;
+        }catch(Exception e){
+            System.out.println(e);
+        }
+        return null;
+    }
     public static void PrintTest(){
         try{
             get();

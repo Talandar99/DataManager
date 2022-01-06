@@ -9,9 +9,11 @@ import javax.swing.*;
 
 public class Main {  
     
-    public static int page=1;
-    public static int searching_option;
+    //public static int page=1;
+    public static int sort_option;
+    public static int search_option;
     public static int is_sort_asc;
+    public static String searching_word;
 
     public static void Reload(){
         int data_rows =DataBaseConnector.RowCount("booksbase");
@@ -35,7 +37,12 @@ public class Main {
             }
             if(i%4==3){
                 if(data_rows>y){
-                    MainTableField.textFields.get(i).setText(data_booksbase[3][y]);
+                    String temp = data_booksbase[3][y];
+                    if (temp==null){
+                        MainTableField.textFields.get(i).setText("Yes");
+                    }else{
+                        MainTableField.textFields.get(i).setText("No "+data_booksbase[3][y]+" have it");
+                    }
                 }
                 y++;
                 }
@@ -47,17 +54,17 @@ public class Main {
         int y=0;
         String data_booksbase[][];
         if(is_sort_asc==0){
-            if(searching_option==0){
+            if(sort_option==0){
                 data_booksbase = DataBaseConnector.GetData_DESC_ID("booksbase");
-            }else if(searching_option==1){
+            }else if(sort_option==1){
                 data_booksbase = DataBaseConnector.GetData_DESC_Author("booksbase");
             }else{
                 data_booksbase = DataBaseConnector.GetData_DESC_Title("booksbase");
             }
         }else{
-            if(searching_option==0){
+            if(sort_option==0){
                 data_booksbase = DataBaseConnector.GetData_ASC_ID("booksbase");
-            }else if(searching_option==1){
+            }else if(sort_option==1){
                 data_booksbase = DataBaseConnector.GetData_ASC_Author("booksbase");
             }else{
                 data_booksbase = DataBaseConnector.GetData_ASC_Title("booksbase");
@@ -81,13 +88,59 @@ public class Main {
             }
             if(i%4==3){
                 if(data_rows>y){
-                    MainTableField.textFields.get(i).setText(data_booksbase[3][y]);
+                    String temp = data_booksbase[3][y];
+                    if (temp==null){
+                        MainTableField.textFields.get(i).setText("Yes");
+                    }else{
+                        MainTableField.textFields.get(i).setText("No "+data_booksbase[3][y]+" have it");
+                    }
                 }
                 y++;
                 }
             }
     }
-    
+
+    public static void Search(){
+        int data_rows =DataBaseConnector.RowCount("booksbase");
+        int y=0;
+        String data_booksbase[][];
+        if(search_option==0){
+            data_booksbase = DataBaseConnector.Search_ID("booksbase", searching_word );
+        }else if(search_option==1){
+            data_booksbase = DataBaseConnector.Search_Author("booksbase", searching_word );
+        }else{
+            data_booksbase = DataBaseConnector.Search_Title("booksbase", searching_word );
+        }
+        for (int i = 0; i < (20*4); i++) {
+            if(i%4==0){
+                if(data_rows>y){
+                    MainTableField.textFields.get(i).setText(data_booksbase[0][y]);
+                }
+            }
+            if(i%4==1){
+                if(data_rows>y){
+                    MainTableField.textFields.get(i).setText(data_booksbase[1][y]);
+                }
+            }
+            if(i%4==2){
+                if(data_rows>y){
+                    MainTableField.textFields.get(i).setText(data_booksbase[2][y]);
+                }
+            }
+            if(i%4==3){
+                if(data_rows>y){
+                    String temp = data_booksbase[3][y];
+                    if (temp==null){
+                        MainTableField.textFields.get(i).setText("Yes");
+                    }else{
+                        MainTableField.textFields.get(i).setText("No "+data_booksbase[3][y]+" have it");
+                    }
+                }
+                y++;
+                }
+            }
+    }
+
     public static void main(String[] args){
 
         
@@ -134,7 +187,7 @@ public class Main {
         label_password.setLocation(100,40);
         login_frame.add(label_password);
 
-        /*
+        //*
         //pętla logowania
         login_frame.setVisible(true);//Widocznośc ramki
         while(DataBaseConnector.accessgranted==false){
@@ -182,7 +235,12 @@ public class Main {
                 if(i%4==3){
                     MainTableField.textFields.get(i).setLocation(tablelocationX+450,60+(30*y));
                     if(data_rows>y){
-                        MainTableField.textFields.get(i).setText(data_booksbase[3][y]);
+                        String temp = data_booksbase[3][y];
+                        if (temp==null){
+                            MainTableField.textFields.get(i).setText("Yes");
+                        }else{
+                            MainTableField.textFields.get(i).setText("No "+data_booksbase[3][y]+" have it");
+                        }
                     }
                     y++;
                 }
@@ -194,10 +252,10 @@ public class Main {
         JTextField column_author = new JTextField();
         JTextField column_title = new JTextField();
         JTextField column_avalible = new JTextField();    
-        column_id.setBackground(Color.WHITE);
-        column_author.setBackground(Color.WHITE);
-        column_title.setBackground(Color.WHITE);
-        column_avalible.setBackground(Color.WHITE);
+        column_id.setBackground(Color.LIGHT_GRAY);
+        column_author.setBackground(Color.LIGHT_GRAY);
+        column_title.setBackground(Color.LIGHT_GRAY);
+        column_avalible.setBackground(Color.LIGHT_GRAY);
         column_id.setEditable(false);
         column_author.setEditable(false);
         column_title.setEditable(false);
@@ -235,56 +293,51 @@ public class Main {
         //Searching
         JLabel label_search = new JLabel("Search:");
         label_search.setSize(150,30);
-        label_search.setLocation(50, 80);
+        label_search.setLocation(10, 30);
         frame.add(label_search);
 
         JTextArea text_search = new JTextArea();
-        text_search.setSize(150,30);
-        text_search.setLocation(0, 110);
+        text_search.setSize(150,20);
+        text_search.setLocation(1, 60);
         frame.add(text_search);
 
         String[] SearchOptions = {"by Id", "By Author", "By Title"};
         JComboBox comboBox_search = new JComboBox(SearchOptions);
         comboBox_search.setSelectedItem(0);
         comboBox_search.setSize(150,30);
-        comboBox_search.setLocation(0,140);
+        comboBox_search.setLocation(0,90);
+        comboBox_search.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){ 
+                search_option = comboBox_search.getSelectedIndex();
+            }
+        }); 
         frame.add(comboBox_search);
 
         JButton button_search = new JButton();
         button_search.setSize(150,30);
-        button_search.setLocation(0,170);
+        button_search.setLocation(0,120);
         button_search.setText("Search");
         frame.add(button_search);
         button_search.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){ 
-                //Search();
+                searching_word = text_search.getText();
+                Search();
             }
         });
 
-        JButton button_show_all = new JButton();
-        button_show_all.setSize(150,30);
-        button_show_all.setLocation(0,200);
-        button_show_all.setText("Show all");
-        frame.add(button_show_all);
-        button_show_all.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent e){ 
-                //
-            }
-        }); 
-
         //Sort
-        JLabel label_order_items = new JLabel("   Sort:");
+        JLabel label_order_items = new JLabel("Sort:");
         label_order_items.setSize(150,30);
-        label_order_items.setLocation(50, 250);
+        label_order_items.setLocation(10, 150);
         frame.add(label_order_items);
 
         JComboBox comboBox_order_items = new JComboBox(SearchOptions);
         comboBox_order_items.setSelectedItem(0);
         comboBox_order_items.setSize(150,30);
-        comboBox_order_items.setLocation(0,280);
+        comboBox_order_items.setLocation(0,180);
         comboBox_order_items.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){ 
-                searching_option = comboBox_order_items.getSelectedIndex();
+                sort_option = comboBox_order_items.getSelectedIndex();
             }
         }); 
         frame.add(comboBox_order_items);
@@ -293,7 +346,7 @@ public class Main {
         JComboBox comboBox_order_updown = new JComboBox(SortOptions);
         comboBox_order_updown.setSelectedItem(0);
         comboBox_order_updown.setSize(150,30);
-        comboBox_order_updown.setLocation(0,310);
+        comboBox_order_updown.setLocation(0,210);
         comboBox_order_updown.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){ 
                 is_sort_asc = comboBox_order_updown.getSelectedIndex();
@@ -303,7 +356,7 @@ public class Main {
   
         JButton button_sort = new JButton();
         button_sort.setSize(150,30);
-        button_sort.setLocation(0,340);
+        button_sort.setLocation(0,240);
         button_sort.setText("Sort");
         frame.add(button_sort);
         button_sort.addActionListener(new ActionListener(){
@@ -315,22 +368,22 @@ public class Main {
         //Add book
         JLabel label_book_add = new JLabel("Add Book:");
         label_book_add.setSize(150,30);
-        label_book_add.setLocation(45, 390);
+        label_book_add.setLocation(10, 270);
         frame.add(label_book_add);
 
         JTextArea text_author = new JTextArea("author");
         text_author.setSize(150,20);
-        text_author.setLocation(1, 420);
+        text_author.setLocation(1, 300);
         frame.add(text_author);
 
         JTextArea text_title = new JTextArea("title");
         text_title.setSize(150,20);
-        text_title.setLocation(1, 450);
+        text_title.setLocation(1, 330);
         frame.add(text_title);
 
         JButton button_book_add = new JButton();
         button_book_add.setSize(150,30);
-        button_book_add.setLocation(0,480);
+        button_book_add.setLocation(0,360);
         button_book_add.setText("Add");
         frame.add(button_book_add);
         button_book_add.addActionListener(new ActionListener(){
@@ -342,22 +395,22 @@ public class Main {
         //Delete book
         JLabel label_book_delete = new JLabel("Delete Book:");
         label_book_delete.setSize(150,30);
-        label_book_delete.setLocation(30, 530);
+        label_book_delete.setLocation(10, 390);
         frame.add(label_book_delete);
 
-        JTextArea text_id = new JTextArea(" id");
-        text_id.setSize(50,20);
-        text_id.setLocation(0, 565);
+        JTextArea text_id = new JTextArea("id");
+        text_id.setSize(49,20);
+        text_id.setLocation(1, 425);
         frame.add(text_id);
 
         JButton button_book_delete = new JButton();
         button_book_delete.setSize(100,30);
-        button_book_delete.setLocation(50,560);
+        button_book_delete.setLocation(50,420);
         button_book_delete.setText("Delete");
         frame.add(button_book_delete);
         button_book_delete.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){ 
-                //
+                DataBaseConnector.DeleteRow("booksbase", Integer.parseInt(text_id.getText()) );
             }
         }); 
 
@@ -404,6 +457,71 @@ public class Main {
                 button_clear.setVisible(true);
                 button_add_data.setVisible(true);
                 button_dev.setVisible(false);
+            }
+        }); 
+
+
+        //borrow book window
+        JFrame b_frame = new JFrame("Borrow");// tworzenie obiektu ramka
+        b_frame.setLocation(100,300);// lokalizacja na ekranie
+        b_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//co się dzieje jak klikniemy X
+        b_frame.setSize(new Dimension(235, 200));//Wymiary ramki
+        b_frame.setLayout(null);//Layout
+
+        JLabel label_book_id = new JLabel("Book id:");
+        label_book_id.setSize(150,30);
+        label_book_id.setLocation(20, 0);
+        b_frame.add(label_book_id);
+
+        JLabel label_book_borrower = new JLabel("Borrower name:");
+        label_book_borrower.setSize(150,30);
+        label_book_borrower.setLocation(10, 60);
+        b_frame.add(label_book_borrower);
+
+        JTextArea text_id_bbook = new JTextArea("id");
+        text_id_bbook.setSize(40,20);
+        text_id_bbook.setLocation(11, 30);
+        b_frame.add(text_id_bbook);
+
+        JTextArea text_borrower = new JTextArea("Borrower");
+        text_borrower.setSize(100,20);
+        text_borrower.setLocation(11, 90);
+        b_frame.add(text_borrower);
+
+        JButton button_borrow = new JButton();
+        button_borrow.setSize(100,30);
+        button_borrow.setLocation(10,120);
+        button_borrow.setText("Borrow");
+        b_frame.add(button_borrow);
+        button_borrow.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                DataBaseConnector.update(text_borrower.getText(), Integer.parseInt(text_id_bbook.getText()), false);
+            }
+        });
+
+        JButton button_return = new JButton();
+        button_return.setSize(100,30);
+        button_return.setLocation(110,120);
+        button_return.setText("Return");
+        b_frame.add(button_return);
+        button_return.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                DataBaseConnector.update(text_borrower.getText(), Integer.parseInt(text_id_bbook.getText()), true);
+            }
+        });
+
+        JButton borrowbook_menu = new JButton();
+        borrowbook_menu.setSize(150,30);
+        borrowbook_menu.setLocation(0,480);
+        borrowbook_menu.setText("Borrow");
+        frame.add(borrowbook_menu);
+        borrowbook_menu.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                if(b_frame.isVisible()){
+                    b_frame.setVisible(false);
+                }else{
+                    b_frame.setVisible(true);
+                }
             }
         }); 
 
