@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class DataBaseConnector {
     //login
     public static String user="root";
-    public static String password="2811";
+    public static String password="1234";
     public static Boolean accessgranted=false;
     public static void login(String user, String password){
         try{
@@ -154,16 +154,160 @@ public class DataBaseConnector {
         }
         return null;
     }
-
-
+    public static String[][] GetData_ASC_ID(String pickedtable){
+        String[][] Data= new String[4][RowCount(pickedtable)];
+        int i=0;
+        try{
+            final String table= pickedtable;
+            Connection con = getConnection();
+            PreparedStatement statement = con.prepareStatement("SELECT * FROM "+table+" ORDER BY Id ASC");
+            ResultSet result = statement.executeQuery();
+            while(result.next()){
+                Data[0][i]=result.getString("Id");
+                Data[1][i]=result.getString("Author");
+                Data[2][i]=result.getString("Title");
+                i++;
+            }
+            return Data;
+        }catch(Exception e){
+            System.out.println(e);
+        }
+        return null;
+    }
+    public static String[][] GetData_DESC_ID(String pickedtable){
+        String[][] Data= new String[4][RowCount(pickedtable)];
+        int i=0;
+        try{
+            final String table= pickedtable;
+            Connection con = getConnection();
+            PreparedStatement statement = con.prepareStatement("SELECT * FROM "+table+" ORDER BY Id DESC");
+            ResultSet result = statement.executeQuery();
+            while(result.next()){
+                Data[0][i]=result.getString("Id");
+                Data[1][i]=result.getString("Author");
+                Data[2][i]=result.getString("Title");
+                i++;
+            }
+            return Data;
+        }catch(Exception e){
+            System.out.println(e);
+        }
+        return null;
+    }
+    public static String[][] GetData_ASC_Author(String pickedtable){
+        String[][] Data= new String[4][RowCount(pickedtable)];
+        int i=0;
+        try{
+            final String table= pickedtable;
+            Connection con = getConnection();
+            PreparedStatement statement = con.prepareStatement("SELECT * FROM "+table+" ORDER BY Author ASC");
+            ResultSet result = statement.executeQuery();
+            while(result.next()){
+                Data[0][i]=result.getString("Id");
+                Data[1][i]=result.getString("Author");
+                Data[2][i]=result.getString("Title");
+                i++;
+            }
+            return Data;
+        }catch(Exception e){
+            System.out.println(e);
+        }
+        return null;
+    }
+    public static String[][] GetData_DESC_Author(String pickedtable){
+        String[][] Data= new String[4][RowCount(pickedtable)];
+        int i=0;
+        try{
+            final String table= pickedtable;
+            Connection con = getConnection();
+            PreparedStatement statement = con.prepareStatement("SELECT * FROM "+table+" ORDER BY Author DESC");
+            ResultSet result = statement.executeQuery();
+            while(result.next()){
+                Data[0][i]=result.getString("Id");
+                Data[1][i]=result.getString("Author");
+                Data[2][i]=result.getString("Title");
+                i++;
+            }
+            return Data;
+        }catch(Exception e){
+            System.out.println(e);
+        }
+        return null;
+    }
+    public static String[][] GetData_ASC_Title(String pickedtable){
+        String[][] Data= new String[4][RowCount(pickedtable)];
+        int i=0;
+        try{
+            final String table= pickedtable;
+            Connection con = getConnection();
+            PreparedStatement statement = con.prepareStatement("SELECT * FROM "+table+" ORDER BY Title ASC");
+            ResultSet result = statement.executeQuery();
+            while(result.next()){
+                Data[0][i]=result.getString("Id");
+                Data[1][i]=result.getString("Author");
+                Data[2][i]=result.getString("Title");
+                i++;
+            }
+            return Data;
+        }catch(Exception e){
+            System.out.println(e);
+        }
+        return null;
+    }
+    public static String[][] GetData_DESC_Title(String pickedtable){
+        String[][] Data= new String[4][RowCount(pickedtable)];
+        int i=0;
+        try{
+            final String table= pickedtable;
+            Connection con = getConnection();
+            PreparedStatement statement = con.prepareStatement("SELECT * FROM "+table+" ORDER BY Title DESC");
+            ResultSet result = statement.executeQuery();
+            while(result.next()){
+                Data[0][i]=result.getString("Id");
+                Data[1][i]=result.getString("Author");
+                Data[2][i]=result.getString("Title");
+                i++;
+            }
+            return Data;
+        }catch(Exception e){
+            System.out.println(e);
+        }
+        return null;
+    }
+    public static void Purge(){
+        try{
+            Connection con = getConnection();
+            PreparedStatement kill = con.prepareStatement("drop table booksbase");
+            kill.executeUpdate();
+            createTable();
+        }catch(Exception e){
+            System.out.println(e);
+        }
+        finally{
+            System.out.println("nothing left");
+        }
+    }
+    public static void Delete_by_ID(){
+        try{
+            Connection con = getConnection();
+            PreparedStatement kill = con.prepareStatement("drop table booksbase");
+            kill.executeUpdate();
+            createTable();
+        }catch(Exception e){
+            System.out.println(e);
+        }
+        finally{
+            System.out.println("nothing left");
+        }
+    }
 
     public static void PrintTest(){
         try{
             get();
         }catch(Exception e){
-            System.out.println("No i co pajacu");
+            System.out.println("Error");
         }finally{
-            System.out.println("dziaa");
+            System.out.println("Everything OK");
         }
     }
 
