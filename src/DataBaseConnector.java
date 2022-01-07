@@ -39,7 +39,7 @@ public class DataBaseConnector {
     public static void createTable(){
         try{
             Connection conn = getConnection();
-            PreparedStatement create = conn.prepareStatement("CREATE TABLE IF NOT EXISTS booksbase(id int NOT NULL AUTO_INCREMENT, Author varchar(255), Title varchar(255), User varchar(255), PRIMARY KEY(id))");//Note the added ')' after 'id)'
+            PreparedStatement create = conn.prepareStatement("CREATE TABLE IF NOT EXISTS booksbase(id int NOT NULL AUTO_INCREMENT, Author varchar(255), Title varchar(255), User varchar(255), PRIMARY KEY(id))");
             create.executeUpdate();
 
         }catch(Exception e){
@@ -77,8 +77,6 @@ public class DataBaseConnector {
             Connection con = getConnection();
             PreparedStatement posted = con.prepareStatement("INSERT INTO booksbase (Author, Title) VALUES ('"+var1+"','"+var2+"')");
             posted.executeUpdate();
-            //PreparedStatement deleteduplicates = con.prepareStatement("delete t1 FROM booksbase t1 INNER JOIN booksbase t2 WHERE t1.id < t2.id AND t1.Author = t2.Author AND t1.Title = t2.Title");
-            //deleteduplicates.executeUpdate();
         }catch(Exception e){
             System.out.println(e);
         }
@@ -118,12 +116,6 @@ public class DataBaseConnector {
         try{
             Connection con = getConnection();
             PreparedStatement statement = con.prepareStatement("SELECT * FROM booksbase");
-            //PreparedStatement statement = con.prepareStatement("SELECT * FROM booksbase LIMIT 3");
-            //PreparedStatement statement = con.prepareStatement("SELECT * FROM booksbase ORDER BY Author ASC");
-            //PreparedStatement statement = con.prepareStatement("SELECT * FROM booksbase, booksbase2 WHERE booksbase.id = booksbase2.id");
-            //PreparedStatement statement = con.prepareStatement("SELECT * FROM booksbase ORDER BY Author DESC");
-            //String searchingAuthor="Andrzej Sapkowski";
-            //PreparedStatement statement = con.prepareStatement("SELECT * FROM booksbase WHERE Author = '"+searchingAuthor+"'");
             ResultSet result = statement.executeQuery();
         
             ArrayList<String> array = new ArrayList<String>();
@@ -153,7 +145,6 @@ public class DataBaseConnector {
             while(result.next()){
                 i++;
             }
-            //System.out.println("rows Counted");
             return i;
 
         }catch(Exception e){
@@ -323,8 +314,6 @@ public class DataBaseConnector {
     }
     public static void DeleteRow(String table, int id){
         try{
-            //table= "booksbase";
-           //id=2;
             Connection con = getConnection();
             PreparedStatement kill = con.prepareStatement("delete from "+table+" where Id="+id+" ORDER BY Id DESC LIMIT 1");
             kill.executeUpdate();
@@ -399,14 +388,4 @@ public class DataBaseConnector {
         }
         return null;
     }
-    public static void PrintTest(){
-        try{
-            get();
-        }catch(Exception e){
-            System.out.println("Error");
-        }finally{
-            System.out.println("Everything OK");
-        }
-    }
-
 }

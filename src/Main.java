@@ -9,44 +9,46 @@ import javax.swing.*;
 
 public class Main {  
     
-    //public static int page=1;
-    public static int sort_option;
-    public static int search_option;
-    public static int is_sort_asc;
-    public static String searching_word;
+    //zmienne globalne związane z przeszukiwaniem/sortowaniem tabeli
+    public static int sort_option;//wybrana opcja sortowania
+    public static int search_option;//wybrana opcja wyszukiwania
+    public static int is_sort_asc;//czy sortowanie jest rosnące
+    public static String searching_word;//wyszukiwane słowo
 
+    //odświeżenie tabeli
     public static void Reload(){
-        int data_rows =DataBaseConnector.RowCount("booksbase");
-        String data_booksbase[][]= DataBaseConnector.GetData("booksbase");
+        int data_rows =DataBaseConnector.RowCount("booksbase");//liczba rzędów informacji
+        String data_booksbase[][]= DataBaseConnector.GetData("booksbase");//tablica dwuwymiarowa zawierająca dane z bazy danych
         int y=0;
+        //funkcja wstawiająca dane do tabeli
         for (int i = 0; i < (20*4); i++) {
-            if(i%4==0){
-                if(data_rows>y){
+            if(i%4==0){//pierwsza kolumna
+                if(data_rows>y){//if zapobiega błędowi wynikającemu z ograniczonej długości tabeli
                     MainTableField.textFields.get(i).setText(data_booksbase[0][y]);
                 }else{
                     MainTableField.textFields.get(i).setText(" ");  
                 }
             }
-            if(i%4==1){
+            if(i%4==1){//druga kolumna
                 if(data_rows>y){
                     MainTableField.textFields.get(i).setText(data_booksbase[1][y]);
                 }else{
                     MainTableField.textFields.get(i).setText(" ");  
                 }
             }
-            if(i%4==2){
+            if(i%4==2){//trzecia kolumna
                 if(data_rows>y){
                     MainTableField.textFields.get(i).setText(data_booksbase[2][y]);
                 }else{
                     MainTableField.textFields.get(i).setText(" ");  
                 }
             }
-            if(i%4==3){
+            if(i%4==3){//czwarta kolumna
                 if(data_rows>y){
-                    String temp = data_booksbase[3][y];
-                    if (temp==null){
+                    if (data_booksbase[3][y]==null){
                         MainTableField.textFields.get(i).setText(" ");
                     }else{
+                        //w przypadku w którym książka jest pożyczona udzielana jest informacja na temat tego kto ją pożyczył
                         MainTableField.textFields.get(i).setText(data_booksbase[3][y]+" have it");
                     }
                 }
@@ -55,10 +57,12 @@ public class Main {
             }
     }
 
+    //funkcja układa informacje według wybranych opcji
     public static void Sort(){
-        int data_rows =DataBaseConnector.RowCount("booksbase");
+        int data_rows =DataBaseConnector.RowCount("booksbase");//liczba rzędów informacji
         int y=0;
-        String data_booksbase[][];
+        String data_booksbase[][];//tablica dwuwymiarowa zawierająca dane z bazy danych
+        //zestaw ifów pozwalający wybrać odpowiednią funkcję w zależności od tego co wybrał użytkownik
         if(is_sort_asc==0){
             if(sort_option==0){
                 data_booksbase = DataBaseConnector.GetData_DESC_ID("booksbase");
@@ -76,6 +80,7 @@ public class Main {
                 data_booksbase = DataBaseConnector.GetData_ASC_Title("booksbase");
             }
         }
+        //funkcja wstawiająca dane do tabeli
         for (int i = 0; i < (20*4); i++) {
             if(i%4==0){
                 if(data_rows>y){
@@ -111,11 +116,12 @@ public class Main {
                 }
             }
     }
-
+    //funkcja pozwalająca na przeszukiwanie bazy danyych na podstawie konkretnego słowa
     public static void Search(){
         int data_rows =DataBaseConnector.RowCount("booksbase");
         int y=0;
         String data_booksbase[][];
+        //wybór kategorii wyszukiwania
         if(search_option==0){
             data_booksbase = DataBaseConnector.Search_ID("booksbase", searching_word );
         }else if(search_option==1){
@@ -176,25 +182,27 @@ public class Main {
         button_login.setSize(100,30);//rozmiar przycisku 
         button_login.setLocation(140,100);//Lokalizacja przycisku
         button_login.setText("Login");//napis na przycisku
-        login_frame.add(button_login);
+        login_frame.add(button_login);//dodawanie przycisku do ramki
+        // co się stanie jak naciśniemy klawisz
         button_login.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){ 
                 DataBaseConnector.login(login_data[0], login_data[1]); 
             }
         });  
 
-        //login
-        JTextArea textarea_login = new JTextArea();
-        textarea_login.setSize(100,20);
-        textarea_login.setLocation(200,10);
-        login_frame.add(textarea_login);
-        JLabel label_login = new JLabel();
-        label_login.setSize(100,20);
-        label_login.setText("Login:");
-        label_login.setLocation(100,10);
-        login_frame.add(label_login);
+        //okno logowania
+        JTextArea textarea_login = new JTextArea();// pole do wpisywania loginu
+        textarea_login.setSize(100,20);//wymiary
+        textarea_login.setLocation(200,10);//lokalizacja
+        login_frame.add(textarea_login);//dodaj do ramki logownaia
+        
+        JLabel label_login = new JLabel();//label z informacją
+        label_login.setSize(100,20);//wymiary
+        label_login.setText("Login:");// informacja
+        label_login.setLocation(100,10);//lokalizacja
+        login_frame.add(label_login);//dodaj do ramki logowania
 
-        //hasło
+        //hasło (pole textowe i label)
         JTextArea textarea_password = new JTextArea();
         textarea_password.setSize(100,20);
         textarea_password.setLocation(200,40);
@@ -207,13 +215,15 @@ public class Main {
 
         //*
         //pętla logowania
+        //ma na celu zablokować dalsze uruchomienie programu, 
+        //tak długo jak długo wpisane hasło nie jest poprawne 
         login_frame.setVisible(true);//Widocznośc ramki
         while(DataBaseConnector.accessgranted==false){
             login_data[0]=textarea_login.getText();
             login_data[1]=textarea_password.getText();
         }
         //*/
-        login_frame.setVisible(false);//Widocznośc ramki
+        login_frame.setVisible(false);//wyłącznie Widoczności ramki logowania
         
         //okno główne
         JFrame frame = new JFrame("Books Database Manager");// tworzenie obiektu ramka
@@ -223,15 +233,17 @@ public class Main {
         frame.setLayout(null);//Layout
 
 
-        //gówna tablica z danymi
-        int data_rows =DataBaseConnector.RowCount("booksbase");
-        String data_booksbase[][]= DataBaseConnector.GetData("booksbase");
-        int tablelocationX=160;
+        //gółwna tablica z danymi
+        int data_rows =DataBaseConnector.RowCount("booksbase");//ilość rzędów
+        String data_booksbase[][]= DataBaseConnector.GetData("booksbase");//tablica z danymi z bazy danych
+        int tablelocationX=160;//lokalizacja tabeli
         int y=0;
+            //pierwsza inicjalizacja tabeli zaraz po jej utworzeniu
             for (int i = 0; i < (20*4); i++) {
                 new MainTableField();
-                MainTableField.textFields.get(i).setBackground(Color.WHITE);
-                MainTableField.textFields.get(i).setSize(150,30);
+                MainTableField.textFields.get(i).setBackground(Color.WHITE);//kolor tła komórki
+                MainTableField.textFields.get(i).setSize(150,30);//wymiar jednej komórki
+
                 if(i%4==0){
                     MainTableField.textFields.get(i).setLocation(tablelocationX+0,60+(30*y));
                     if(data_rows>y){
@@ -271,53 +283,59 @@ public class Main {
                     }
                     y++;
                 }
-                MainTableField.textFields.get(i).setEditable(false);
-                frame.add(MainTableField.textFields.get(i));
+                MainTableField.textFields.get(i).setEditable(false);//wyłącznie edycji danych w komórce z poziomu użykownika
+                frame.add(MainTableField.textFields.get(i));//dodanie komórki do okna
             }
-            
+        
+        //tworzenie nagłówków do tabeli
         JTextField column_id = new JTextField();
         JTextField column_author = new JTextField();
         JTextField column_title = new JTextField();
         JTextField column_avalible = new JTextField();    
+        //kolor tła nagłówków
         column_id.setBackground(Color.LIGHT_GRAY);
         column_author.setBackground(Color.LIGHT_GRAY);
         column_title.setBackground(Color.LIGHT_GRAY);
         column_avalible.setBackground(Color.LIGHT_GRAY);
+        //wyłącznie edycji
         column_id.setEditable(false);
         column_author.setEditable(false);
         column_title.setEditable(false);
         column_avalible.setEditable(false);
+        //wymiar komórki
         column_id.setSize(150,30);
         column_author.setSize(150,30);
         column_title.setSize(150,30);
         column_avalible.setSize(150,30);
+        //lokalizacja w ramce
         column_id.setLocation(tablelocationX+0,30);
         column_author.setLocation(tablelocationX+150,30);
         column_title.setLocation(tablelocationX+300,30);
         column_avalible.setLocation(tablelocationX+450,30);
+        //wyświetlana informacja
         column_id.setText("ID");
         column_author.setText("Author");
         column_title.setText("Title");
         column_avalible.setText("Avalibility data");
+        //dodaj do ramki
         frame.add(column_id);
         frame.add(column_author);
         frame.add(column_title);
         frame.add(column_avalible);  
 
-        System.out.println(DataBaseConnector.RowCount("booksbase"));
         //przycisk do odświeżania
         JButton button_reload = new JButton();
         button_reload.setSize(150,30);//rozmiar przycisku 
         button_reload.setLocation(0,0);//Lokalizacja przycisku
         button_reload.setText("Reload");//napis na przycisku
         frame.add(button_reload);//dodawanie przycisku do ramki
-        button_reload.addActionListener(new ActionListener(){
+        button_reload.addActionListener(new ActionListener(){//działanie po naciśnięciu przycisku
             public void actionPerformed(ActionEvent e){ 
                 Reload();
             }
         });  
 
-        //Searching
+        //wyszukiwanie
         JLabel label_search = new JLabel("Search:");
         label_search.setSize(150,30);
         label_search.setLocation(10, 30);
@@ -328,8 +346,8 @@ public class Main {
         text_search.setLocation(1, 60);
         frame.add(text_search);
 
-        String[] SearchOptions = {"by Id", "By Author", "By Title"};
-        JComboBox comboBox_search = new JComboBox(SearchOptions);
+        String[] SearchOptions = {"by Id", "By Author", "By Title"};// tablica zawierająca opcje wyszukiwania
+        JComboBox comboBox_search = new JComboBox(SearchOptions);//tworzenie interaktywnej listy
         comboBox_search.setSelectedItem(0);
         comboBox_search.setSize(150,30);
         comboBox_search.setLocation(0,90);
@@ -352,7 +370,7 @@ public class Main {
             }
         });
 
-        //Sort
+        //Sortowanie
         JLabel label_order_items = new JLabel("Sort:");
         label_order_items.setSize(150,30);
         label_order_items.setLocation(10, 150);
@@ -392,7 +410,7 @@ public class Main {
             }
         }); 
 
-        //Add book
+        //Dodaj książkę 
         JLabel label_book_add = new JLabel("Add Book:");
         label_book_add.setSize(150,30);
         label_book_add.setLocation(10, 270);
@@ -419,7 +437,7 @@ public class Main {
             }
         }); 
 
-        //Delete book
+        //Usuń ksiązkę
         JLabel label_book_delete = new JLabel("Delete Book:");
         label_book_delete.setSize(150,30);
         label_book_delete.setLocation(10, 390);
@@ -441,7 +459,7 @@ public class Main {
             }
         }); 
 
-        //Developer options
+        //Opcje developera
         JButton button_clear = new JButton();
         button_clear.setSize(200,30);
         button_clear.setLocation(160,0);
@@ -456,7 +474,7 @@ public class Main {
             }
         }); 
 
-        //add data
+        //Dodaj informacje 
         JButton button_add_data = new JButton();
         button_add_data.setSize(200,30);
         button_add_data.setLocation(360,0);
@@ -471,7 +489,7 @@ public class Main {
             }
         }); 
 
-        //dev mode switch
+        //przycisk włączający tryb developera
         JButton button_dev = new JButton();
         button_dev.setSize(150,30);
         button_dev.setLocation(0,700);
@@ -488,7 +506,7 @@ public class Main {
         }); 
 
 
-        //borrow book window
+        //okno pożyczania książki
         JFrame b_frame = new JFrame("Borrow");// tworzenie obiektu ramka
         b_frame.setLocation(100,300);// lokalizacja na ekranie
         b_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//co się dzieje jak klikniemy X
@@ -551,7 +569,6 @@ public class Main {
                 }
             }
         }); 
-
-        frame.setVisible(true);//Widocznośc ramki
+        frame.setVisible(true);//Widocznośc ramki głównej
     }
 }
