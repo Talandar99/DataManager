@@ -8,9 +8,11 @@ import java.util.ArrayList;
 
 public class DataBaseConnector {
     //login
-    public static String user;
-    public static String password;
-    public static Boolean accessgranted=false;
+    public static String user;//nazwa użytkownika
+    public static String password;//hasło
+    public static Boolean accessgranted=false;//informacja czy dostęp został przyznany
+    //funkcja odpowiedzialna za zalogownie się do bazy danych
+    
     public static void login(String user, String password){
         try{
             DataBaseConnector.user=user;
@@ -24,10 +26,11 @@ public class DataBaseConnector {
 
     public static Connection getConnection() throws Exception{
         try{
-            String url = "jdbc:mysql://localhost:3306/booksdatabase";
+            String url = "jdbc:mysql://localhost:3306/booksdatabase";//adres bazy danych
+            //stworzenie połączenia
             Connection conn = DriverManager.getConnection(url, user, password);
-            System.out.println("Connected");
-            accessgranted=true;
+            System.out.println("Connected");//informacja zwrotna
+            accessgranted=true;//przyznanie dostępu
             return conn;
 
         }catch(Exception e){
@@ -138,14 +141,14 @@ public class DataBaseConnector {
     public static int RowCount(String pickedtable){
         try{
             final String table= pickedtable;
-            Connection con = getConnection();
-            PreparedStatement statement = con.prepareStatement("SELECT * FROM "+table);
-            ResultSet result = statement.executeQuery();
+            Connection con = getConnection();//połącz z bazą danych
+            PreparedStatement statement = con.prepareStatement("SELECT * FROM "+table);//stwórz zapytanie
+            ResultSet result = statement.executeQuery();//wykonaj
             int i=0;
-            while(result.next()){
+            while(result.next()){//iteracja po rezultatach
                 i++;
             }
-            return i;
+            return i;//zwracana ilośc rzędów danych
 
         }catch(Exception e){
             System.out.println(e);
