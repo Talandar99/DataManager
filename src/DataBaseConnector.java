@@ -7,12 +7,10 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public class DataBaseConnector {
-    //login
-    public static String user;//nazwa użytkownika
-    public static String password;//hasło
-    public static Boolean accessgranted=false;//informacja czy dostęp został przyznany
-    //funkcja odpowiedzialna za zalogownie się do bazy danych
-    
+    public static String user;
+    public static String password;
+    public static Boolean accessgranted=false;
+
     public static void login(String user, String password){
         try{
             DataBaseConnector.user=user;
@@ -23,14 +21,12 @@ public class DataBaseConnector {
         }
 
     }
-
     public static Connection getConnection() throws Exception{
         try{
-            String url = "jdbc:mysql://localhost:3306/booksdatabase";//adres bazy danych
-            //stworzenie połączenia
+            String url = "jdbc:mysql://localhost:3306/booksdatabase";
             Connection conn = DriverManager.getConnection(url, user, password);
-            System.out.println("Connected");//informacja zwrotna
-            accessgranted=true;//przyznanie dostępu
+            System.out.println("Connected");
+            accessgranted=true;
             return conn;
 
         }catch(Exception e){
@@ -88,12 +84,10 @@ public class DataBaseConnector {
         }
     }
     public static void update(String user, int id, boolean remove){
-        final String var1 = user;
-        final int var2 = id;
         if (remove==false){
             try{
                 Connection con = getConnection();
-                PreparedStatement posted = con.prepareStatement("UPDATE booksbase SET User = '"+user+"' WHERE id ="+var2+"");
+                PreparedStatement posted = con.prepareStatement("UPDATE booksbase SET User = '"+user+"' WHERE id ="+id+"");
                 posted.executeUpdate();
             }catch(Exception e){
                 System.out.println(e);
@@ -104,7 +98,7 @@ public class DataBaseConnector {
         }else{
             try{
                 Connection con = getConnection();
-                PreparedStatement posted = con.prepareStatement("UPDATE booksbase SET User = null WHERE id ="+var2+"");
+                PreparedStatement posted = con.prepareStatement("UPDATE booksbase SET User = null WHERE id ="+id+"");
                 posted.executeUpdate();
             }catch(Exception e){
                 System.out.println(e);
@@ -115,40 +109,17 @@ public class DataBaseConnector {
         }
 
     }
-    public static ArrayList<String> get() throws Exception{
-        try{
-            Connection con = getConnection();
-            PreparedStatement statement = con.prepareStatement("SELECT * FROM booksbase");
-            ResultSet result = statement.executeQuery();
-        
-            ArrayList<String> array = new ArrayList<String>();
-            while(result.next()){
-                System.out.print(result.getString("Id"));
-                System.out.print(" ");
-                System.out.print(result.getString("Author"));
-                System.out.print(" ");
-                System.out.println(result.getString("Title"));
-                array.add(result.getString("Title"));
-            }
-            System.out.println(">>---All records have been selected---<<");
-            return array;
-
-        }catch(Exception e){
-            System.out.println(e);
-        }
-        return null;
-    }
     public static int RowCount(String pickedtable){
         try{
             final String table= pickedtable;
-            Connection con = getConnection();//połącz z bazą danych
-            PreparedStatement statement = con.prepareStatement("SELECT * FROM "+table);//stwórz zapytanie
+            Connection con = getConnection();
+            PreparedStatement statement = con.prepareStatement("SELECT * FROM "+table);
             ResultSet result = statement.executeQuery();//wykonaj
             int i=0;
-            while(result.next()){//iteracja po rezultatach
+            while(result.next()){
                 i++;
             }
-            return i;//zwracana ilośc rzędów danych
+            return i;
 
         }catch(Exception e){
             System.out.println(e);
